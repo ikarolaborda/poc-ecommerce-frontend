@@ -1,33 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import React, {useState} from 'react';
 import {Catalog} from "./components/catalog";
-import {Product} from "./models/Product";
 import {Navbar} from "./components/navbar";
 import Banner from "./components/banner";
+import {Route} from "react-router-dom";
+import ProductDetail from "./components/productDetail";
+import {Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 
 function App() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [darkMode, setDarkMode] = useState(false);
+    const paletteType = darkMode ? 'dark' : 'light';
+    const theme = createTheme({
+        palette: {
+            mode: paletteType,
+            background: {
+                default: paletteType === 'light' ? '#eaeaea' : '#121212',
+            }
+        }
+    });
 
-    useEffect(() => {
-       fetch("http://localhost:5000/api/products")
-           .then(
-               response => response.json()
-           )
-           .then(data => setProducts(data))
-    }, []);
+    function handleThemeChange() {
+        setDarkMode(!darkMode);
+    }
     return (
-        <div>
-            <div className="w-100">
-                <Navbar/>
-            </div>
-            <div className="container">
-                <Banner/>
-                <div className="row">
-                    <Catalog products={products}/>
-                </div>
-            </div>
-        </div>
+        <>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
+                <Container>
+                    <Route exact path="/" component={Banner}/>
+                    <Route exact path="/catalog" component={Catalog} />
+                    <Route exact path="/catalog/:id" component={ProductDetail} />
+                </Container>
+            </ThemeProvider>
+
+        </>
   );
 }
 

@@ -1,68 +1,76 @@
-import {useState} from 'react';
-import {
-    MDBContainer,
-    MDBNavbar,
-    MDBNavbarBrand,
-    MDBNavbarToggler,
-    MDBIcon,
-    MDBNavbarNav,
-    MDBNavbarItem,
-    MDBNavbarLink,
-    MDBBtn,
-    MDBDropdown,
-    MDBDropdownToggle,
-    MDBDropdownMenu,
-    MDBDropdownItem,
-    MDBCollapse,
-} from 'mdb-react-ui-kit';
+import {AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography} from "@mui/material";
+import {NavLink} from "react-router-dom";
+import {ShoppingCart} from "@mui/icons-material";
 
-export function Navbar() {
-    const [showBasic, setShowBasic] = useState(false);
+interface Props {
+    darkMode: boolean;
+    handleThemeChange: () => void;
+}
 
+const midNavLinks = [
+        {title: 'catalog', path: '/catalog'},
+        {title: 'about', path: '/about/'},
+        {title: 'contact', path: '/contact/'},
+];
+
+const rightNavLinks = [
+        {title: 'login', path: '/login'},
+        {title: 'register', path: '/register'},
+];
+
+const navStyles = {
+    color: 'inherit',
+    typography: 'h6',
+    '&:hover': {color: 'grey.400'},
+    '&.active': {color: 'grey.500'},
+    textDecoration: 'none'
+
+}
+
+export function Navbar({darkMode, handleThemeChange}: Props) {
     return (
-        <MDBNavbar expand='lg' light bgColor='light'>
-            <MDBContainer fluid>
-                <MDBNavbarBrand href='#'>POC-Store</MDBNavbarBrand>
-
-                <MDBNavbarToggler
-                    aria-controls='navbarSupportedContent'
-                    aria-expanded='false'
-                    aria-label='Toggle navigation'
-                    onClick={() => setShowBasic(!showBasic)}
-                >
-                    <MDBIcon icon='bars' fas />
-                </MDBNavbarToggler>
-
-                <MDBCollapse navbar show={showBasic}>
-                    <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
-                        <MDBNavbarItem>
-                            <MDBNavbarLink active aria-current='page' href='#'>
-                                Home
-                            </MDBNavbarLink>
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <MDBNavbarLink href='#'>Link</MDBNavbarLink>
-                        </MDBNavbarItem>
-
-                        <MDBNavbarItem>
-                            <MDBDropdown>
-                                <MDBDropdownToggle tag='a' className='nav-link' role='button'>
-                                    Dropdown
-                                </MDBDropdownToggle>
-                                <MDBDropdownMenu>
-                                    <MDBDropdownItem link>Action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Another action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Something else here</MDBDropdownItem>
-                                </MDBDropdownMenu>
-                            </MDBDropdown>
-                        </MDBNavbarItem>
-                    </MDBNavbarNav>
-
-                    <MDBNavbarItem className="d-flex input-group w-auto">
-                        <MDBNavbarLink href="#">Login</MDBNavbarLink>
-                    </MDBNavbarItem>
-                </MDBCollapse>
-            </MDBContainer>
-        </MDBNavbar>
+        <AppBar position="static" sx={{ mb: 4}}>
+            <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Box display="flex" alignItems="center">
+                    <Typography variant="h6" component={NavLink} to="/" exact sx={navStyles}>
+                        POC-Ecommerce-React
+                    </Typography>
+                    <Switch checked={darkMode} onChange={handleThemeChange}/>
+                </Box>
+                <Box>
+                    <List sx={{ display: 'flex'}}>
+                        {midNavLinks.map(({title, path}) => (
+                            <ListItem
+                                component={NavLink}
+                                to={path}
+                                key={path}
+                                sx={navStyles}
+                            >
+                                {title.toUpperCase()}
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+                <Box display="flex" alignItems="center">
+                    <IconButton size="large" sx={{ color: "inherit"}}>
+                        <Badge badgeContent={4} color={"secondary"}>
+                            <ShoppingCart/>
+                        </Badge>
+                    </IconButton>
+                    <List sx={{ display: 'flex'}}>
+                        {rightNavLinks.map(({title, path}) => (
+                            <ListItem
+                                component={NavLink}
+                                to={path}
+                                key={path}
+                                sx={navStyles}
+                            >
+                                {title.toUpperCase()}
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            </Toolbar>
+        </AppBar>
     );
 }

@@ -1,28 +1,38 @@
 import React from "react";
 import {Product} from "../models/Product";
+import { NumericFormat } from "react-number-format";
+import {Link} from "react-router-dom";
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Typography} from "@mui/material";
 
 function ProductCard({ product }: { product: Product }) {
   return (
-      <div className="card mx-auto mt-3 mb-3">
-          <img src={product.pictureUrl} className="card-img-top h-50" alt="product_picture"/>
-              <div className="card-body">
-                  <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text mt-1">{product.description}</p>
-                  <p className="card-text mt-1">Quantity in Stock:  { product.quantityInStock < 100 ?
-                      <span className="text-danger">{product.quantityInStock} (Critical)</span> :
-                      <span className="text-success">{product.quantityInStock}</span> }
-                  </p>
+      <>
+          <Card>
+              <CardHeader
+                  avatar={
+                      <Avatar sx={{  bgcolor: 'secondary.main' }}>
+                            {product.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                  }
+                  title={product.name}
+                  titleTypographyProps={{ sx: { fontWeight: "bold", color: 'primary.main' } }}
+              />
+              <CardMedia sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light' }} image={product.pictureUrl} />
 
-                  <p className="card-text mt-1 text-danger">Price: {product.price}</p>
-
-                  <div className="row text-center">
-                      <div className="d-flex flex-column bottom-0 mb-3 position-absolute">
-                          <button className="btn btn-primary">Add to cart</button>
-                      </div>
-                  </div>
-
-              </div>
-      </div>
+              <CardContent>
+                  <Typography gutterBottom color="secondary" variant="h5" >
+                        R${(product.price / 10).toFixed(2)}
+                  </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {product.productBrand} / {product.productType}
+                    </Typography>
+              </CardContent>
+              <CardActions>
+                  <Button size="small">Add to Cart</Button>
+                  <Button size="small" component={Link} to={`/catalog/${product.id}`}>View</Button>
+              </CardActions>
+          </Card>
+      </>
   );
 }
 

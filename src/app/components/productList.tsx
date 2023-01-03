@@ -1,6 +1,7 @@
 import {Product} from "../models/Product";
 import ProductCard from "./productCard";
 import React from "react";
+import {Grid} from "@mui/material";
 
 interface Props {
     products: Product[];
@@ -8,14 +9,14 @@ interface Props {
 
 export function ProductList({products}: Props) {
     return (
-        <>
-            {products.map((product) =>
-                (
-                    <div key={product.id} className="col-md-3 mb-3 d-inline-flex align-items-stretch">
-                        <ProductCard product={product}/>
-                    </div>
-                )
-            )}
-        </>
+        <Grid container spacing={4}>
+                {products.map((product) =>
+                    (
+                        <Grid item xs={12} sm={12} md={2} lg={3} key={product.id}>
+                            <ProductCard key={product.id} product={product}/>
+                        </Grid>
+                    )
+                )}
+        </Grid>
     );
 }
